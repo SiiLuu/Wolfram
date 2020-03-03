@@ -5,7 +5,8 @@
 ## Makefile
 ##
 
-SRC  =  src/main.hs
+SRC  =  src/main.hs \
+		src/tree.hs
 
 OBJ   =  $(SRC:.cpp=.o)
 

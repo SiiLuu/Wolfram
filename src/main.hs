@@ -11,10 +11,13 @@ import System.Environment
 import System.Exit
 import Data.Maybe
 import Data.List
+import Text.Read
+import Tree
 
-checkExit :: Int -> IO () 
-checkExit rule
-    | rule == -1 = errorExit
+checkExit :: Int -> IO ()
+checkExit val
+    | val == -1 = errorExit
+    | val `mod` 2 /= 0 = errorExit
     | otherwise = return ()
 
 errorExit :: IO ()
@@ -33,19 +36,43 @@ defaultVal elem
 getPos :: String -> [String] -> Int
 getPos elem list = fromMaybe (defaultVal elem) (elemIndex elem list)
 
+checkFlag :: [String] -> Int -> IO ()
+checkFlag list count
+    | count >= (length list) = return ()
+    | list !! count == "--rule"   = checkValue list (count + 1)
+    | list !! count == "--lines"  = checkValue list (count + 1)
+    | list !! count == "--window" = checkValue list (count + 1)
+    | list !! count == "--start"  = checkValue list (count + 1)
+    | list !! count == "--move"   = checkValue list (count + 1)
+    | otherwise = errorExit
+
+checkValue :: [String] -> Int -> IO ()
+checkValue list count
+    | count == (length list) = return ()
+    | (readMaybe (list !! count) :: Maybe Int) /= Nothing = checkFlag list (count + 1)
+    | otherwise = errorExit
+
+getValue :: [String] -> Int -> Int
+getValue list val
+    | val == 0 = 0
+    | val == 80 = 80
+    | otherwise = read (list !! (val + 1)) :: Int
+
 main :: IO ()
 main = do
     args <- getArgs
-
-    let rule   = getPos "--rule"   args
-    let lines  = getPos "--lines"  args
-    let window = getPos "--window" args
-    let start  = getPos "--start"  args
-    let move   = getPos "--move"   args
-    checkExit rule
-
-    print rule
-    print lines
-    print window
-    print start
-    print move
+    checkExit (length args)
+    let count  = 0
+    checkFlag args count
+    let rulePos = getPos "--rule"   args
+    let ruleVal = read (args !! (rulePos + 1)) :: Int
+    let linesPos  = getPos "--lines"  args
+    let linesVal  = getValue args linesPos
+    let windowPos = getPos "--window" args
+    let windowVal = getValue args windowPos 
+    let startPos  = getPos "--start"  args
+    let startVal  = getValue args startPos
+    let movePos   = getPos "--move"   args
+    let moveVal   = getValue args movePos
+    checkExit rulePos
+    displayTree ruleVal linesVal windowVal startVal moveVal
