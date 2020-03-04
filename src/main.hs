@@ -14,11 +14,18 @@ import Data.List
 import Text.Read
 import Tree
 
-checkExit :: Int -> IO ()
-checkExit val
-    | val == -1 = errorExit
+checkPairs :: Int -> IO ()
+checkPairs val
     | val `mod` 2 /= 0 = errorExit
     | otherwise = return ()
+
+checkExit :: Int -> Int -> IO ()
+checkExit pos val
+    | pos == -1 = errorExit
+    | val == 30 = return ()
+    | val == 90 = return ()
+    | val == 110 = return ()
+    | otherwise = errorExit
 
 errorExit :: IO ()
 errorExit = do
@@ -61,7 +68,7 @@ getValue list val
 main :: IO ()
 main = do
     args <- getArgs
-    checkExit (length args)
+    checkPairs (length args)
     let count  = 0
     checkFlag args count
     let rulePos = getPos "--rule"   args
@@ -74,5 +81,5 @@ main = do
     let startVal  = getValue args startPos
     let movePos   = getPos "--move"   args
     let moveVal   = getValue args movePos
-    checkExit rulePos
+    checkExit rulePos ruleVal
     displayTree ruleVal linesVal windowVal startVal moveVal

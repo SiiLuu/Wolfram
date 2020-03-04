@@ -7,24 +7,24 @@
 
 module Tree where
 
-getBlinks :: Int -> Int -> String -> String
-getBlinks window count tree
-    | count == window = tree
-    | otherwise = getBlinks window (count + 1) (" " ++ tree)
+getBlinks :: Int -> String -> String
+getBlinks window tree
+    | window <= 0 = tree
+    | otherwise = getBlinks (window - 1) (" " ++ tree)
 
-loop :: Int -> Int -> String -> IO ()
-loop lines count tree
+loop :: Int -> Int -> IO ()
+loop lines space
     | lines == 0 = do
-        putStrLn tree
-        loop lines count (tree ++ "*")
-    | count == lines = return ()
+        let str = getBlinks space " "
+        putStrLn str
+        loop lines (space - 1)
+
+    | lines <= 1 = return ()
     | otherwise = do
-        putStrLn tree
-        loop lines (count + 1) (tree ++ "*")
+        let str = getBlinks space " "
+        putStrLn str
+        loop (lines - 1) (space - 1)
 
 displayTree :: Int -> Int -> Int -> Int -> Int -> IO ()
 displayTree rule lines window start move = do
-    let count = 0
-    let str = "*"
-    let tree = getBlinks window count str
-    loop lines count tree
+    loop lines window
