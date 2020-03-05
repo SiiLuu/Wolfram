@@ -2,29 +2,36 @@
 -- EPITECH PROJECT, 2020
 -- FUN_wolfram_2019
 -- File description:
--- tree
+-- tree 
 --
 
 module Tree where
+
+import Data.Maybe
+import Text.Read
+import Data.List
 
 getBlinks :: Int -> String -> String
 getBlinks window tree
     | window <= 0 = tree
     | otherwise = getBlinks (window - 1) (" " ++ tree)
 
-loop :: Int -> Int -> IO ()
-loop lines space
-    | lines == 0 = do
-        let str = getBlinks space " "
-        putStrLn str
-        loop lines (space - 1)
+windowed :: Int -> Int -> String -> Int -> IO ()
+windowed lines space tree window
+    | length (tree) >= window = loop (lines - 1) (space - 1) (tree) window
+    | (length (tree) + 1) >= window = loop (lines - 1) (space - 1) (tree ++ "*") window
+    | otherwise = loop (lines - 1) (space - 1) (tree ++ "**") window
 
+loop :: Int -> Int -> String -> Int -> IO ()
+loop lines space tree window
     | lines <= 1 = return ()
     | otherwise = do
-        let str = getBlinks space " "
+        let str = (getBlinks space "" ++ tree ++ getBlinks (space - 1) "")
         putStrLn str
-        loop (lines - 1) (space - 1)
+        windowed lines space tree window
 
 displayTree :: Int -> Int -> Int -> Int -> Int -> IO ()
 displayTree rule lines window start move = do
-    loop lines window
+    let tree = "*"
+    let esp = (window `div` 2)
+    loop lines esp tree window
