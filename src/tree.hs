@@ -11,27 +11,59 @@ import Data.Maybe
 import Text.Read
 import Data.List
 
+getBlinksEnd :: Int -> Int -> String -> String
+getBlinksEnd window space tree
+    | space <= 0 && window `mod` 2 /= 0 = getBlinksEnd (window - 1) (space - 1) (" " ++ tree)
+    | space <= 0 = tree
+    | otherwise = getBlinksEnd window (space - 1) (" " ++ tree)
+
 getBlinks :: Int -> String -> String
-getBlinks window tree
-    | window <= 0 = tree
-    | otherwise = getBlinks (window - 1) (" " ++ tree)
+getBlinks space tree
+    | space <= 0 = tree
+    | otherwise = getBlinks (space - 1) (" " ++ tree)
 
-windowed :: Int -> Int -> String -> Int -> IO ()
-windowed lines space tree window
-    | length (tree) >= window = loop (lines - 1) (space - 1) (tree) window
-    | (length (tree) + 1) >= window = loop (lines - 1) (space - 1) (tree ++ "*") window
-    | otherwise = loop (lines - 1) (space - 1) (tree ++ "**") window
+toolarge :: String -> String -> Int -> String
+toolarge str finalStr size
+    | (str !! (size - 1)) == '*' && (str !! size) == ' ' = changeStr str (finalStr ++ "*") (size + 1)
+    | (str !! (size - 1)) == ' ' && (str !! size) == '*' = changeStr str (finalStr ++ "*") (size + 1)
+    | otherwise = changeStr str (finalStr ++ " ") (size + 1)
 
-loop :: Int -> Int -> String -> Int -> IO ()
-loop lines space tree window
+negative :: String -> String -> Int -> String
+negative str finalStr size
+    | (str !! size) == '*' && (str !! (size + 1)) == '*' = changeStr str (finalStr ++ "*") (size + 1)
+    | (str !! size) == '*' && (str !! (size + 1)) == ' ' = changeStr str (finalStr ++ "*") (size + 1)
+    | (str !! size) == ' ' && (str !! (size + 1)) == '*' = changeStr str (finalStr ++ "*") (size + 1)
+    | otherwise = changeStr str (finalStr ++ " ") (size + 1)
+
+changeStr :: String -> String -> Int -> String
+changeStr str finalStr size
+    | size >= length (str) = finalStr
+    | size == 0 = negative str finalStr size
+    | size == (length (str) - 1) = toolarge str finalStr size
+    | (str !! (size - 1)) == '*' && (str !! size) == ' ' && (str !! (size + 1)) == ' ' = changeStr str (finalStr ++ "*") (size + 1)
+    | (str !! (size - 1)) == ' ' && (str !! size) == '*' && (str !! (size + 1)) == '*' = changeStr str (finalStr ++ "*") (size + 1)
+    | (str !! (size - 1)) == ' ' && (str !! size) == '*' && (str !! (size + 1)) == ' ' = changeStr str (finalStr ++ "*") (size + 1)
+    | (str !! (size - 1)) == ' ' && (str !! size) == ' ' && (str !! (size + 1)) == '*' = changeStr str (finalStr ++ "*") (size + 1)
+    | otherwise = changeStr str (finalStr ++ " ") (size + 1)
+
+generation :: String -> String -> Int -> IO ()
+generation str finalStr lines
     | lines <= 1 = return ()
     | otherwise = do
-        let str = (getBlinks space "" ++ tree ++ getBlinks (space - 1) "")
-        putStrLn str
-        windowed lines space tree window
+        let size = 0
+        let final = changeStr str finalStr size
+        putStrLn final
+        generation final finalStr (lines - 1)
+
+loop :: Int -> Int -> String -> Int -> IO ()
+loop lines space tree window = do
+    let str = (getBlinks space "" ++ tree ++ getBlinksEnd window (space - 1) "")
+    putStrLn str
+    let finalStr = ""
+    generation str finalStr lines 
 
 displayTree :: Int -> Int -> Int -> Int -> Int -> IO ()
 displayTree rule lines window start move = do
     let tree = "*"
     let esp = (window `div` 2)
-    loop lines esp tree window
+    loop (lines + 1) esp tree window
