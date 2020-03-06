@@ -8,7 +8,10 @@
 SRC  =  src/main.hs			\
 		src/tree.hs			\
 		src/arguments.hs	\
-		src/default.hs
+		src/default.hs		\
+		src/rule30.hs		\
+		src/rule90.hs 		\
+		src/rule110.hs
 
 OBJ   =  $(SRC:.cpp=.o)
 
