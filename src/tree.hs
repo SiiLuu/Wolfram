@@ -31,14 +31,14 @@ generation str finalStr rule lines start
     | rule == 90 = rule90 str finalStr rule lines start
     | otherwise  = rule110 str finalStr rule lines start
 
-loop :: Int -> Int -> Int -> String -> Int -> Int -> IO ()
-loop rule lines space tree window start
+loop :: Int -> Int -> Int -> String -> Int -> Int -> Int -> IO ()
+loop rule lines space tree window start move
     | start /= 0 = do
-        let str = (getBlinks space "" ++ tree ++ getBlinksEnd window (space - 1) "")
+        let str = (getBlinks (space + move) "" ++ tree ++ getBlinksEnd window ((space - 1) - move) "")
         let finalStr = ""
         generation str finalStr rule (lines + 1) (start - 1)
     | otherwise = do
-        let str = (getBlinks space "" ++ tree ++ getBlinksEnd window (space - 1) "")
+        let str = (getBlinks (space + move) "" ++ tree ++ getBlinksEnd window ((space - 1) - move) "")
         putStrLn str
         let finalStr = ""
         generation str finalStr rule lines start
@@ -47,4 +47,4 @@ displayTree :: Int -> Int -> Int -> Int -> Int -> IO ()
 displayTree rule lines window start move = do
     let tree = "*"
     let esp = (window `div` 2)
-    loop rule lines esp tree window start
+    loop rule lines esp tree window start move
