@@ -13,7 +13,7 @@ rule110 str finalStr rule lines start
     | start > 0 = do
         let size = 0
         let final = changeStr110 str finalStr size
-        rule30 final finalStr rule lines (start - 1)
+        rule110 final finalStr rule lines (start - 1)
     | otherwise = do
         let size = 0
         let final = changeStr110 str finalStr size
