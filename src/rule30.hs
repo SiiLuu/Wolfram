@@ -7,8 +7,21 @@
 
 module Rule30 where
 
+infinite :: String -> String -> Int -> Int -> Int-> IO ()
+infinite str finalStr rule lines start
+    | start > 0 = do
+        let size = 0
+        let final = changeStr30 str finalStr size
+        infinite final finalStr rule lines (start - 1)
+    | otherwise = do
+        let size = 0
+        let final = changeStr30 str finalStr size
+        putStrLn final
+        infinite final finalStr rule lines start
+
 rule30 :: String -> String -> Int -> Int -> Int-> IO ()
 rule30 str finalStr rule lines start
+    | lines == 0 = infinite str finalStr rule lines start
     | lines <= 1 = return ()
     | start > 0 = do
         let size = 0
