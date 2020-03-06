@@ -7,14 +7,18 @@
 
 module Rule30 where
 
-rule30 :: String -> String -> Int -> Int -> IO ()
-rule30 str finalStr rule lines
+rule30 :: String -> String -> Int -> Int -> Int-> IO ()
+rule30 str finalStr rule lines start
     | lines <= 1 = return ()
+    | start > 0 = do
+        let size = 0
+        let final = changeStr30 str finalStr size
+        rule30 final finalStr rule lines (start - 1)
     | otherwise = do
         let size = 0
         let final = changeStr30 str finalStr size
         putStrLn final
-        rule30 final finalStr rule (lines - 1)
+        rule30 final finalStr rule (lines - 1) start
 
 toolarge :: String -> String -> Int -> String
 toolarge str finalStr size
