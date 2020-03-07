@@ -7,31 +7,35 @@
 
 module Rule90 where
 
-infinite :: String -> String -> Int -> Int-> IO ()
-infinite str finalStr lines start
+infinite :: String -> String -> Int -> Int-> Int -> Int -> Int -> IO ()
+infinite str finalStr lines start window spaces power
     | start > 0 = do
         let size = 0
         let final = changeStr90 str finalStr size
-        infinite final finalStr lines (start - 1)
+        infinite final finalStr lines (start - 1) window spaces power
     | otherwise = do
         let size = 0
         let final = changeStr90 str finalStr size
-        putStrLn final
-        infinite final finalStr lines start
+        let a = drop (power - spaces) final
+        let b = take window a
+        putStrLn b
+        infinite final finalStr lines start window spaces power
 
-rule90 :: String -> String -> Int -> Int -> IO ()
-rule90 str finalStr lines start
-    | lines == 0 = infinite str finalStr lines start
+rule90 :: String -> String -> Int -> Int -> Int -> Int -> Int -> IO ()
+rule90 str finalStr lines start window spaces power
+    | lines == 0 = infinite str finalStr lines start window spaces power
     | lines <= 1 = return ()
     | start > 0 = do
         let size = 0
         let final = changeStr90 str finalStr size
-        rule90 final finalStr lines (start - 1)
+        rule90 final finalStr lines (start - 1) window spaces power
     | otherwise = do
         let size = 0
         let final = changeStr90 str finalStr size
-        putStrLn final
-        rule90 final finalStr (lines - 1) start
+        let a = drop (power - spaces) final
+        let b = take window a
+        putStrLn b
+        rule90 final finalStr (lines - 1) start window spaces power
 
 toolarge :: String -> String -> Int -> String
 toolarge str finalStr size
