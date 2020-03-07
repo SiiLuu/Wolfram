@@ -23,7 +23,7 @@ infinite str finalStr lines start window spaces power
 
 rule110 :: String -> String -> Int -> Int -> Int -> Int -> Int -> IO ()
 rule110 str finalStr lines start window spaces power
-    | lines == 0 = infinite str finalStr lines start window spaces power
+    | lines == 0 = return ()
     | lines <= 1 = return ()
     | start > 0 = do
         let size = 0
