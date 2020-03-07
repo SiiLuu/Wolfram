@@ -34,16 +34,16 @@ generation str finalStr rule lines start window spaces power
 loop :: Int -> Int -> Int -> String -> Int -> Int -> Int -> IO ()
 loop rule lines space tree window start move
     | start /= 0 = do
-        let str = (getBlinks (space * lines) "" ++ tree ++ getBlinksEnd window (space * lines - 1) "")
+        let str = (getBlinks ((space + move) * lines) "" ++ tree ++ getBlinksEnd window ((space + move) * lines - 1) "")
         let finalStr = ""
         generation str finalStr rule (lines + 1) (start - 1) window (move + space) (space * lines)
     | otherwise = do
-        let str = (getBlinks (space * lines) "" ++ tree ++ getBlinksEnd window (space * lines - 1) "")
-        let first = drop ((space * lines) - (move + space )) str
+        let str = (getBlinks ((space + move) * lines) "" ++ tree ++ getBlinksEnd window ((space + move) * lines - 1) "")
+        let first = drop (((space + move) * lines) - (move + space )) str
         let final = take window first
         putStrLn final
         let finalStr = ""
-        generation str finalStr rule lines start window (move + space) (space * lines)
+        generation str finalStr rule lines start window (move + space) ((space + move) * lines)
 
 displayTree :: Int -> Int -> Int -> Int -> Int -> IO ()
 displayTree rule lines window start move = do
