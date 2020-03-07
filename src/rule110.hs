@@ -7,31 +7,31 @@
 
 module Rule110 where
 
-infinite :: String -> String -> Int -> Int -> Int-> IO ()
-infinite str finalStr rule lines start
+infinite :: String -> String -> Int -> Int-> IO ()
+infinite str finalStr lines start
     | start > 0 = do
         let size = 0
         let final = changeStr110 str finalStr size
-        infinite final finalStr rule lines (start - 1)
+        infinite final finalStr lines (start - 1)
     | otherwise = do
         let size = 0
         let final = changeStr110 str finalStr size
         putStrLn final
-        infinite final finalStr rule lines start
+        infinite final finalStr lines start
 
-rule110 :: String -> String -> Int -> Int -> Int -> IO ()
-rule110 str finalStr rule lines start
-    | lines == 0 = infinite str finalStr rule lines start
+rule110 :: String -> String -> Int -> Int -> IO ()
+rule110 str finalStr lines start
+    | lines == 0 = infinite str finalStr lines start
     | lines <= 1 = return ()
     | start > 0 = do
         let size = 0
         let final = changeStr110 str finalStr size
-        rule110 final finalStr rule lines (start - 1)
+        rule110 final finalStr lines (start - 1)
     | otherwise = do
         let size = 0
         let final = changeStr110 str finalStr size
         putStrLn final
-        rule110 final finalStr rule (lines - 1) start
+        rule110 final finalStr (lines - 1) start
 
 toolarge :: String -> String -> Int -> String
 toolarge str finalStr size

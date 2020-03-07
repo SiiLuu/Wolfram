@@ -27,9 +27,9 @@ getBlinks space tree
 
 generation :: String -> String -> Int -> Int -> Int -> IO ()
 generation str finalStr rule lines start
-    | rule == 30 = rule30 str finalStr rule lines start
-    | rule == 90 = rule90 str finalStr rule lines start
-    | otherwise  = rule110 str finalStr rule lines start
+    | rule == 30 = rule30 str finalStr lines start
+    | rule == 90 = rule90 str finalStr lines start
+    | otherwise  = rule110 str finalStr lines start
 
 loop :: Int -> Int -> Int -> String -> Int -> Int -> Int -> IO ()
 loop rule lines space tree window start move
