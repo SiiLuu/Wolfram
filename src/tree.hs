@@ -2,14 +2,11 @@
 -- EPITECH PROJECT, 2020
 -- FUN_wolfram_2019
 -- File description:
--- tree 
+-- tree
 --
 
 module Tree where
 
-import Data.Maybe
-import Text.Read
-import Data.List
 import Rule30
 import Rule90
 import Rule110
