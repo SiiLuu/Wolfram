@@ -7,35 +7,26 @@
 
 module Rule90 where
 
-infinite :: String -> String -> Int -> Int-> Int -> Int -> Int -> IO ()
-infinite str finalStr lines start window spaces power
-    | start > 0 = do
-        let size = 0
-        let final = changeStr90 str finalStr size
-        infinite final finalStr lines (start - 1) window spaces power
-    | otherwise = do
-        let size = 0
-        let final = changeStr90 str finalStr size
-        let a = drop (power - spaces) final
-        let b = take window a
-        putStrLn b
-        infinite final finalStr lines start window spaces power
+withoutStart ::  String -> String -> Int -> Int-> Int-> Int-> Int-> IO ()
+withoutStart str finalStr lines start window spaces power = do
+    let size = 0
+    let final = changeStr90 str finalStr size
+    let begin = drop (power - spaces) final
+    let end = take window begin
+    putStrLn end
+    rule90 final finalStr (lines - 1) start window spaces power
+
+withStart ::  String -> String -> Int -> Int-> Int-> Int-> Int-> IO ()
+withStart str finalStr lines start window spaces power = do
+    let size = 0
+    let final = changeStr90 str finalStr size
+    rule90 final finalStr lines (start - 1) window spaces power
 
 rule90 :: String -> String -> Int -> Int -> Int -> Int -> Int -> IO ()
 rule90 str finalStr lines start window spaces power
-    | lines == 0 = return ()
-    | lines <= 1 = return ()
-    | start > 0 = do
-        let size = 0
-        let final = changeStr90 str finalStr size
-        rule90 final finalStr lines (start - 1) window spaces power
-    | otherwise = do
-        let size = 0
-        let final = changeStr90 str finalStr size
-        let a = drop (power - spaces) final
-        let b = take window a
-        putStrLn b
-        rule90 final finalStr (lines - 1) start window spaces power
+    | lines == 0 || lines <= 1 = return ()
+    | start > 0 = withStart str finalStr lines start window spaces power
+    | otherwise = withoutStart str finalStr lines start window spaces power
 
 toolarge :: String -> String -> Int -> String
 toolarge str finalStr size

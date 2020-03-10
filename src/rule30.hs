@@ -16,13 +16,16 @@ withoutStart str finalStr lines start window spaces power = do
     putStrLn end
     rule30 final finalStr (lines - 1) start window spaces power
 
+withStart ::  String -> String -> Int -> Int-> Int-> Int-> Int-> IO ()
+withStart str finalStr lines start window spaces power = do
+    let size = 0
+    let final = changeStr30 str finalStr size
+    rule30 final finalStr lines (start - 1) window spaces power
+
 rule30 :: String -> String -> Int -> Int-> Int-> Int-> Int-> IO ()
 rule30 str finalStr lines start window spaces power
     | lines == 0 || lines <= 1 = return ()
-    | start > 0 = do
-        let size = 0
-        let final = changeStr30 str finalStr size
-        rule30 final finalStr lines (start - 1) window spaces power
+    | start > 0 = withStart str finalStr lines start window spaces power
     | otherwise = withoutStart str finalStr lines start window spaces power
 
 toolarge :: String -> String -> Int -> String
